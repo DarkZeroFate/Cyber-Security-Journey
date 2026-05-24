@@ -1,36 +1,62 @@
-# Troubleshooting Log
+# Network Lab: Home Infrastructure & Security Experiments
 
-Catatan kegagalan adalah guru terbaik. File ini adalah log dari tantangan teknis yang saya hadapi selama membangun dan mengelola lab ini. Dokumentasi ini membantu saya mengingat solusi untuk masalah yang sama di masa depan.
+I built this lab to bridge the gap between cybersecurity theory and real-world practice. Theory is essential, but there is no substitute for building, breaking, and fixing systems in a controlled environment.
+
+This repository documents my home lab setup, the challenges encountered, and experiments conducted to understand network architecture and security dynamics.
 
 ---
 
-## 1. Kali Linux VM "File Not Found" (VirtualBox Import)
-- **Problem**: Saat *setup* Kali VM, VirtualBox tidak mengenali file yang saya unduh.
-- **Context**: Saya mencoba menggunakan menu "New" (yang mencari file `.iso`), padahal file yang diunduh adalah *pre-built appliance*.
-- **Solution**: 
-    1. Jangan gunakan menu "New".
-    2. Gunakan menu **Machine** > **Add**.
-    3. Pilih file berakhiran `.vbox` dari folder hasil ekstraksi.
-- **Lesson Learned**: *Installer Images* (.iso) dan *Virtual Machines* (.vbox) adalah dua hal yang berbeda. Selalu periksa format file sebelum melakukan *import*.
+## 🏗️ Lab Architecture
 
-## 2. Inter-VM Communication Failure (Networking)
-- **Problem**: Kali Linux dan Ubuntu Server tidak bisa saling berkomunikasi (tidak bisa `ping`).
-- **Context**: Keduanya berjalan, tapi terisolasi satu sama lain.
-- **Root Cause**: Network Adapter di VirtualBox masih diset ke "NAT".
-- **Solution**: 
-    1. Masuk ke **Network Settings**.
-    2. Ubah adapter menjadi **Host-Only Adapter**.
-    3. Ini memastikan kedua VM berada di *subnet* yang sama (misal: `192.168.56.x`).
-- **Lesson Learned**: Memahami *Network Mode* (NAT, Bridged, Host-Only) sangat krusial agar VM bisa saling berbicara dalam lingkungan lab.
+My lab is currently hosted on a local machine using **Oracle VM VirtualBox**.
 
-## 3. Netplan Syntax Errors (Ubuntu Server)
-- **Problem**: Konfigurasi IP statis di Ubuntu tidak mau berjalan (error saat `netplan apply`).
-- **Context**: Mengedit file `/etc/netplan/01-netcfg.yaml`.
-- **Solution**: Ternyata masalahnya adalah *tab indentation*. YAML sangat ketat, gunakan **spasi** saja. Setelah diganti, jalankan:
+* **Host Machine:** [Your OS/Hardware]
+* **Attacker Machine:** Kali Linux (For scanning, enumeration, and payload testing)
+* **Target Machine:** Ubuntu Server 22.04 LTS (Sandbox for services and vulnerability testing)
+* **Networking:** Host-Only Adapter (Isolated environment to prevent traffic leakage)
+
+
+
+---
+
+## 🎯 Objectives
+I’m moving away from following tutorials blindly. My goal is to understand the "why" behind the tools by focusing on:
+
+- **Traffic Flow:** How data moves between the attacker and the target.
+- **Firewall/IDS Behavior:** How security controls react to specific packets.
+- **Problem Solving:** Learning to troubleshoot when things break (which happens often!).
+
+---
+
+## 🛠️ Troubleshooting Log
+I believe the best way to learn is by failing. This is a running log of the hurdles I’ve hit and how I resolved them.
+
+### 1. Kali Linux VM "File Not Found" (Import Error)
+* **Context:** Trying to "New" a VM using a pre-built appliance image.
+* **Fix:** Instead of creating a new VM, used `Machine` > `Add` and selected the `.vbox` file directly.
+* **Takeaway:** Always identify if you are using an `.iso` (manual install) or an `.vbox` (pre-built appliance).
+
+### 2. Inter-VM Communication
+* **Context:** VMs could not `ping` each other.
+* **Fix:** Changed network adapter settings from `NAT` to `Host-Only`.
+* **Takeaway:** Understanding network modes is non-negotiable for lab isolation.
+
+### 3. Netplan Syntax Errors (Ubuntu)
+* **Context:** Static IP configuration in `/etc/netplan/` kept failing.
+* **Fix:** YAML is strict—I was using **tabs** instead of **spaces**. Fixed the indentation to use two spaces.
+* **Verification:**
     ```bash
     sudo netplan apply
+    ip a
     ```
-- **Lesson Learned**: *System administration* membutuhkan ketelitian tingkat tinggi. *Typo* sekecil spasi/tab bisa merusak konfigurasi sistem.
+* **Takeaway:** Precision matters. Invisible typos (like tabs vs. spaces) can break system configs.
 
 ---
-*Log ini akan terus diperbarui seiring dengan perkembangan lab saya.*
+
+## 🚀 Active Projects
+* **[Reverse TCP Payloads]:** Testing how shells behave through internal networks.
+* **[Network Traffic Analysis]:** Using Wireshark to monitor packet interactions.
+
+---
+
+*If you are looking at this and notice a configuration flaw, I would love the feedback. I am here to learn.*
