@@ -12,8 +12,8 @@ This guide documents how I built my local network lab. I designed this setup to 
 The goal of this lab is to create a controlled space. By using a **Host-Only Adapter**, I ensure that my testing traffic stays within the VM network and doesn't accidentally leak into my home WiFi or ISP network.
 
 - **Host Machine:** My physical laptop.
-- **Kali Linux IP:** `192.168.56.10`
-- **Ubuntu Server IP:** `192.168.56.20`
+- **Kali Linux IP:** `192.168.50.10`
+- **Ubuntu Server IP:** `192.168.50.20`
 
 ## Step-by-Step Setup
 
