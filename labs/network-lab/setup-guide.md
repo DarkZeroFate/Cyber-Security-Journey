@@ -32,14 +32,6 @@ This was the trickiest part. I had to configure static IPs so my machines could 
 
 To apply my network changes, I used:
 ```bash
-
-Security & Testing Habits
-Since this lab is for security testing:
-
-Snapshots: I take a snapshot of the VMs before running any payload tests. If I break the OS (which I do often!), I can revert to a clean state in seconds.
-
-Isolation: Always keep the network settings to "Host-Only" or "Internal Network" when dealing with malware or suspicious traffic.
-
-Feel free to reach out or open an issue in this repo if you're trying to replicate this setup and hitting similar walls!
 sudo netplan generate
 sudo netplan apply
+
