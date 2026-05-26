@@ -84,13 +84,13 @@ netstat -anob
 Step Back: Post-Mortem & Lessons Learned
 Ultimately, this exploit attempt failed to establish a reverse shell. Here is the post-mortem analysis of why this happened:
 
-Blocked by Security System (Windows Defender): The malware I generated using the default msfvenom settings was too simple. Modern security systems on Windows 11 instantly detected, blocked, and deleted the executable before the malware could even run.
+- Blocked by Security System (Windows Defender): The malware I generated using the default msfvenom settings was too simple. Modern security systems on Windows 11 instantly detected, blocked, and deleted the executable before the malware could even run.
 
-Missing Telemetry in Splunk: Because Windows Defender immediately neutralized and erased the malware upon download/execution, it didn't even have the chance to run and generate the network traffic or advanced behavior logs I was hoping to see. As a result, I couldn't observe the detailed telemetry in Splunk.
+- Missing Telemetry in Splunk: Because Windows Defender immediately neutralized and erased the malware upon download/execution, it didn't even have the chance to run and generate the network traffic or advanced behavior logs I was hoping to see. As a result, I couldn't observe the detailed telemetry in Splunk.
 
-Payload Mismatch (Configuration Error): While reviewing my steps, I realized a logical error in my setup. The malware was generated using the vncinject payload, but my listener was configured to wait for a meterpreter session. Even if Windows Defender hadn't blocked it, this connection would have never succeeded because the payloads did not match.
+- Payload Mismatch (Configuration Error): While reviewing my steps, I realized a logical error in my setup. The malware was generated using the vncinject payload, but my listener was configured to wait for a meterpreter session. Even if Windows Defender hadn't blocked it, this connection would have never succeeded because the payloads did not match.
 
 ## Action Plan & Next Steps:
-Evasion Tactics: I now realize that using standard out-of-the-box methods is no longer effective. Moving forward, I need to design more moderate and complex malware (e.g., using encryption, encoding, or custom loaders) to evade and bypass Windows 11 EDR/Antivirus systems.
+- Evasion Tactics: I now realize that using standard out-of-the-box methods is no longer effective. Moving forward, I need to design more moderate and complex malware (e.g., using encryption, encoding, or custom loaders) to evade and bypass Windows 11 EDR/Antivirus systems.
 
-Defensive Perspective: My next goal is to figure out how to properly capture the initial detection logs (such as Windows Defender alerts) and forward those to Splunk. This will allow me to at least document the exact moment the security system catches the threat, continuing my journey from a Blue Team perspective.
+- Defensive Perspective: My next goal is to figure out how to properly capture the initial detection logs (such as Windows Defender alerts) and forward those to Splunk. This will allow me to at least document the exact moment the security system catches the threat, continuing my journey from a Blue Team perspective.
